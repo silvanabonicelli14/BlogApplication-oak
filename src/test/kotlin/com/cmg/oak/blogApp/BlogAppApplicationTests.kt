@@ -18,19 +18,41 @@ class BlogAppApplicationTests(
 	@Autowired private val mockMvc: MockMvc) {
 
 	private val mapper = jacksonObjectMapper()
+	val articles = listOf(
+		Article(1, "title x", "body of the article x"),
+		Article(2, "title y", "body of the article y"))
 
 	@Test
 	fun `can get all articles`() {
-		val articles = listOf(
-			Article(1, "title x", "body of the article x"),
-			Article(2, "title y", "body of the article y")
-		)
 
 		mockMvc.get("/api/articles")
 			.andExpect {
 				status { isOk() }
 				content { contentType(MediaType.APPLICATION_JSON) }
 				content { json(mapper.writeValueAsString(articles)) }
+			}
+
+	}
+
+	@Test
+	fun `can get one article`() {
+		val id = 1
+		val expected = articles.first { it.id == id }
+
+		mockMvc.get("/api/articles/$id")
+			.andExpect {
+				status { isOk() }
+				content { contentType(MediaType.APPLICATION_JSON) }
+				content { json(mapper.writeValueAsString(expected)) }
+			}
+
+	}
+
+	@Test
+	fun `not found when article does not exist`() {
+		mockMvc.get("/api/articles/999999")
+			.andExpect {
+				status { isNotFound() }
 			}
 
 	}
