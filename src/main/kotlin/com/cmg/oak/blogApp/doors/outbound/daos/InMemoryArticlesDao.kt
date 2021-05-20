@@ -3,8 +3,8 @@ package com.cmg.oak.blogApp.doors.outbound.daos
 import com.cmg.oak.blogApp.domain.model.Article
 import org.springframework.stereotype.Component
 
-@Component
-class InMemoryArticlesRepository(initialArticles: List<Article>) : ArticlesDao {
+@Component("inmemory")
+class InMemoryArticlesDao(initialArticles: List<Article>) : ArticlesDao {
 	private val articles = initialArticles.toMutableList()
 
 	override fun getAll(): List<Article> = articles

@@ -3,6 +3,7 @@ package com.cmg.oak.blogApp.doors.inbound.routes
 import com.cmg.oak.blogApp.domain.model.Article
 import com.cmg.oak.blogApp.doors.outbound.daos.ArticlesDao
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
@@ -12,7 +13,9 @@ const val articlesResource = "/articles"
 @RestController
 @RequestMapping("/api")
 class ArticlesController(
-	@Autowired private val articlesDao: ArticlesDao){
+	@Autowired
+	@Qualifier("jpa")
+	private val articlesDao: ArticlesDao){
 
 	@GetMapping(articlesResource)
 	fun getAll(): List<Article> = articlesDao.getAll()

@@ -1,19 +1,17 @@
 package com.cmg.oak.blogApp.doors.outbound.entities
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import javax.persistence.*
 
-@Entity
+@Entity(name = "Blog.articles")
+@Table(schema = "Blog", name = "articles")
 open class ArticleEntity(
     @Id
-    @GeneratedValue
-    var id: Int,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    open var id: Int,
 
     @Column
-    val title: String,
+    open val title: String,
 
     @Column
-    val body: String,
+    open val body: String
 )
