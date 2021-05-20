@@ -1,10 +1,10 @@
-package com.cmg.oak.blogApp.doors.outbound.repositories
+package com.cmg.oak.blogApp.doors.outbound.daos
 
 import com.cmg.oak.blogApp.domain.model.Article
 import org.springframework.stereotype.Component
 
 @Component
-class InMemoryArticlesRepository(initialArticles: List<Article>) : ArticlesRepository {
+class InMemoryArticlesRepository(initialArticles: List<Article>) : ArticlesDao {
 	private val articles = initialArticles.toMutableList()
 
 	override fun getAll(): List<Article> = articles
@@ -17,5 +17,5 @@ class InMemoryArticlesRepository(initialArticles: List<Article>) : ArticlesRepos
 	}
 
 
-	fun reset(): Unit = articles.clear()
+	override fun reset(): Unit = articles.clear()
 }

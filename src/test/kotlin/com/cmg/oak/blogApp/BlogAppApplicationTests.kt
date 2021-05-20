@@ -1,8 +1,7 @@
 package com.cmg.oak.blogApp
 
 import com.cmg.oak.blogApp.domain.model.Article
-import com.cmg.oak.blogApp.doors.outbound.repositories.ArticlesRepository
-import com.cmg.oak.blogApp.doors.outbound.repositories.InMemoryArticlesRepository
+import com.cmg.oak.blogApp.doors.outbound.daos.ArticlesDao
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.matchers.shouldBe
@@ -15,14 +14,13 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
-import org.springframework.web.servlet.function.RequestPredicates.contentType
 
 @SpringBootTest(
 	webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 	classes = [BlogAppApplication::class])
 @AutoConfigureMockMvc
 class BlogAppApplicationTests(
-	@Autowired private val articlesRepository: InMemoryArticlesRepository,
+	@Autowired private val articlesRepository: ArticlesDao,
 	@Autowired private val mockMvc: MockMvc) {
 
 	private val mapper = jacksonObjectMapper()
