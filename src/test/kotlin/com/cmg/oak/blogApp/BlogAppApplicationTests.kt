@@ -1,6 +1,8 @@
 package com.cmg.oak.blogApp
 
 import com.cmg.oak.blogApp.domain.model.Article
+import com.cmg.oak.blogApp.doors.outbound.repositories.ArticlesRepository
+import com.cmg.oak.blogApp.doors.outbound.repositories.InMemoryArticlesRepository
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.matchers.shouldBe
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.function.RequestPredicates.contentType
 	classes = [BlogAppApplication::class])
 @AutoConfigureMockMvc
 class BlogAppApplicationTests(
+	@Autowired private val articlesRepository: InMemoryArticlesRepository,
 	@Autowired private val mockMvc: MockMvc) {
 
 	private val mapper = jacksonObjectMapper()
@@ -29,7 +32,8 @@ class BlogAppApplicationTests(
 	
 	@BeforeEach
 	fun beforeEach(){
-		
+		articlesRepository.reset()
+		articles.forEach(articlesRepository::save)
 	}
 
 	@Test
