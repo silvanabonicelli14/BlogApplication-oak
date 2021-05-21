@@ -5,8 +5,6 @@ import com.cmg.oak.blogApp.doors.outbound.daos.ArticlesDao
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +17,6 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.transaction.support.TransactionTemplate
 import javax.persistence.EntityManager
-import javax.transaction.Transactional
 
 @SpringBootTest(
 	webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -37,31 +34,29 @@ class BlogAppApplicationTests(
 		Article(1, "title x", "body of the article x"),
 		Article(2, "title y", "body of the article y"))
 
-
-	fun before(){
+	fun withExpected(test: (List<Article>) -> Unit){
 		articlesDao.reset()
-		articles.forEach(articlesDao::save)
+		articles
+			.map(articlesDao::save)
+			.let(test)
 	}
 
 	@Test
-	fun `can get all articles`() {
-		before()
+	fun `can get all articles`() = withExpected { expectedArticles ->
 		mockMvc.get("/api/articles")
 			.andExpect {
 				status { isOk() }
 				content { contentType(MediaType.APPLICATION_JSON) }
-				content { json(mapper.writeValueAsString(articles)) }
+				content { json(mapper.writeValueAsString(expectedArticles)) }
 			}
 
 	}
 
 	@Test
-	fun `can get one article`() {
-		before()
-		val id = 1
-		val expected = articles.first { it.id == id }
+	fun `can get one article`() = withExpected { expectedArticles ->
+		val expected = expectedArticles.first()
 
-		mockMvc.get("/api/articles/$id")
+		mockMvc.get("/api/articles/${expected.id}")
 			.andExpect {
 				status { isOk() }
 				content { contentType(MediaType.APPLICATION_JSON) }
@@ -71,8 +66,7 @@ class BlogAppApplicationTests(
 	}
 
 	@Test
-	fun `not found when article does not exist`() {
-		before()
+	fun `not found when article does not exist`() = withExpected {
 
 		mockMvc.get("/api/articles/999999")
 			.andExpect {
@@ -82,8 +76,7 @@ class BlogAppApplicationTests(
 	}
 
 	@Test
-	fun `can save a new article`() {
-		before()
+	fun `can save a new article`()  = withExpected {
 
 		mockMvc.post("/api/articles"){
 			contentType = MediaType.APPLICATION_JSON
