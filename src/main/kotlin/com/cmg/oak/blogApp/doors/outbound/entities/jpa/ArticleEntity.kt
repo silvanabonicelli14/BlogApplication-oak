@@ -1,4 +1,4 @@
-package com.cmg.oak.blogApp.doors.outbound.entities
+package com.cmg.oak.blogApp.doors.outbound.entities.jpa
 
 import javax.persistence.*
 

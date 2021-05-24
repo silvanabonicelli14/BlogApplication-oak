@@ -24,9 +24,7 @@ import javax.persistence.EntityManager
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BlogAppApplicationTests(
-	@Autowired val entityManager: EntityManager,
-	@Autowired val transactionTemplate: TransactionTemplate,
-	@Autowired @Qualifier("jpa") private val articlesDao: ArticlesDao,
+	@Autowired @Qualifier("exposed") private val articlesDao: ArticlesDao,
 	@Autowired private val mockMvc: MockMvc) {
 
 	private val mapper = jacksonObjectMapper()

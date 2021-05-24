@@ -14,7 +14,7 @@ const val articlesResource = "/articles"
 @RequestMapping("/api")
 class ArticlesController(
 	@Autowired
-	@Qualifier("jpa")
+	@Qualifier("exposed")
 	private val articlesDao: ArticlesDao){
 
 	@GetMapping(articlesResource)

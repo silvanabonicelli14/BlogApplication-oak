@@ -1,6 +1,7 @@
-package com.cmg.oak.blogApp.doors.outbound.daos
+package com.cmg.oak.blogApp.doors.outbound.daos.jpa
 
 import com.cmg.oak.blogApp.domain.model.Article
+import com.cmg.oak.blogApp.doors.outbound.daos.ArticlesDao
 import com.cmg.oak.blogApp.doors.outbound.entities.jpa.ArticleEntity
 import com.cmg.oak.blogApp.doors.outbound.repositories.ArticlesRepository
 import org.springframework.data.repository.findByIdOrNull

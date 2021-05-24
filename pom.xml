@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<kotlin.version>1.5.0</kotlin.version>
+		<exposed.version>0.31.1</exposed.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -58,6 +59,21 @@
 			<groupId>io.kotest</groupId>
 			<artifactId>kotest-assertions-core-jvm</artifactId>
 			<version>4.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.exposed</groupId>
+			<artifactId>exposed-core</artifactId>
+			<version>${exposed.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.exposed</groupId>
+			<artifactId>exposed-dao</artifactId>
+			<version>${exposed.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.exposed</groupId>
+			<artifactId>exposed-jdbc</artifactId>
+			<version>${exposed.version}</version>
 		</dependency>
 	</dependencies>
 
