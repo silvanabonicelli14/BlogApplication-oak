@@ -8,6 +8,9 @@ class InMemoryArticlesDao(initialArticles: List<Article>) : ArticlesDao {
 	private val articles = initialArticles.toMutableList()
 
 	override fun getAll(): List<Article> = articles
+	override fun getOneWithComment(id: Int): Article? {
+		TODO("Not yet implemented")
+	}
 
 	override fun getOne(id: Int): Article? = articles.firstOrNull { it.id == id }
 	override fun save(article: Article): Article {

@@ -1,6 +1,7 @@
 package com.cmg.oak.blogApp
 
 import com.cmg.oak.blogApp.domain.model.Article
+import com.cmg.oak.blogApp.domain.model.ArticleComment
 import com.cmg.oak.blogApp.doors.outbound.daos.ArticlesDao
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -15,8 +16,6 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
-import org.springframework.transaction.support.TransactionTemplate
-import javax.persistence.EntityManager
 
 @SpringBootTest(
 	webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -29,8 +28,13 @@ class BlogAppApplicationTests(
 
 	private val mapper = jacksonObjectMapper()
 	val articles = listOf(
-		Article(1, "title x", "body of the article x"),
-		Article(2, "title y", "body of the article y"))
+		Article(1, "title x", "body of the article x",mutableListOf<ArticleComment>()),
+		Article(2, "title y", "body of the article y",mutableListOf<ArticleComment>()))
+
+	val articleComments = listOf(
+		ArticleComment(1, "Silvana", "comment of the article x",1),
+		ArticleComment(2, "Andrea", "comment of the article y",2)
+	)
 
 	fun withExpected(test: (List<Article>) -> Unit){
 		articlesDao.reset()
@@ -78,7 +82,7 @@ class BlogAppApplicationTests(
 
 		mockMvc.post("/api/articles"){
 			contentType = MediaType.APPLICATION_JSON
-			content = mapper.writeValueAsString(Article(0, "z", "Body of z"))
+			content = mapper.writeValueAsString(Article(0, "z", "Body of z",mutableListOf<ArticleComment>()))
 			accept = MediaType.APPLICATION_JSON
 		}
 		.andExpect {
@@ -93,6 +97,19 @@ class BlogAppApplicationTests(
 			mockMvc.get(location)
 				.andExpect { status { isOk() } }
 		}
+
+	}
+
+	@Test
+	fun `can get one article and his comments`() = withExpected { expectedArticles ->
+		val expected = expectedArticles.first()
+
+		mockMvc.get("/api/articles/comments/${expected.id}")
+			.andExpect {
+				status { isOk() }
+				content { contentType(MediaType.APPLICATION_JSON) }
+				content { json(mapper.writeValueAsString(expected)) }
+			}
 
 	}
 

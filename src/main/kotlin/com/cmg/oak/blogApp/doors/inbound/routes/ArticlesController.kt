@@ -33,5 +33,12 @@ class ArticlesController(
 	fun save(@RequestBody article: Article): ResponseEntity<Article> =
 		articlesDao.save(article)
 			.run { ResponseEntity.created(URI("/api/articles/${id}")).body(this) }
+
+
+	@GetMapping("$articlesResource/comments/{id}")
+	fun getOneWithComments(@PathVariable("id") id: Int): ResponseEntity<Article> =
+		articlesDao.getOne(id)
+			?.run { ResponseEntity.ok(this) }
+			?: ResponseEntity.notFound().build()
 }
 

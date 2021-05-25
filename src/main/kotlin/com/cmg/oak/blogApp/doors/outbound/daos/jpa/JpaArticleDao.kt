@@ -1,6 +1,7 @@
 package com.cmg.oak.blogApp.doors.outbound.daos.jpa
 
 import com.cmg.oak.blogApp.domain.model.Article
+import com.cmg.oak.blogApp.domain.model.ArticleComment
 import com.cmg.oak.blogApp.doors.outbound.daos.ArticlesDao
 import com.cmg.oak.blogApp.doors.outbound.entities.jpa.ArticleEntity
 import com.cmg.oak.blogApp.doors.outbound.repositories.ArticlesRepository
@@ -13,8 +14,12 @@ class JpaArticleDao(private val articlesRepository: ArticlesRepository): Article
         .findAll()
         .map(this::toArticle)
 
+    override fun getOneWithComment(id: Int): Article? {
+        TODO("Not yet implemented")
+    }
+
     private fun toArticle(it: ArticleEntity) =
-        Article(it.id, it.title, it.body)
+        Article(it.id, it.title, it.body,mutableListOf<ArticleComment>())
 
     override fun getOne(id: Int): Article? = articlesRepository
         .findByIdOrNull(id)

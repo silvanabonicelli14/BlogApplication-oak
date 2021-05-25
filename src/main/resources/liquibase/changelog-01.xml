@@ -10,13 +10,13 @@
         </column>
         <column name="author" type="nvarchar(150)"/>
         <column name="comment" type="nvarchar(2000)"/>
-        <column name="article_id" type="int"/>
+        <column name="article_id" type="integer"/>
     </createTable>
     <addForeignKeyConstraint  baseColumnNames="article_id"
-                              baseTableName="articlecomments"
+                              baseTableName="Blog.articlecomments"
                               constraintName="fk_article_comments"
                               onDelete="NO ACTION"
                               onUpdate="CASCADE"
                               referencedColumnNames="id"
-                              referencedTableName="articles" />
+                              referencedTableName="Blog.articles" />
 </changeSet>

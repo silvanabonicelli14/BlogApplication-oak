@@ -4,6 +4,7 @@ import com.cmg.oak.blogApp.domain.model.Article
 
 interface ArticlesDao {
     fun getAll(): List<Article>
+    fun getOneWithComment(id: Int): Article?
     fun getOne(id: Int): Article?
     fun save(article: Article): Article
     fun reset(): Unit
