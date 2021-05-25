@@ -4,7 +4,6 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-
     <changeSet id="createSchema" author="luca.piccinelli">
         <sql endDelimiter=";">
             CREATE SCHEMA Blog
@@ -14,7 +13,7 @@
     <changeSet id="create_article_table" author="luca.piccinelli">
         <createTable
             tableName="articles"
-            schemaName="Blog"
+                schemaName="Blog"
         >
             <column name="id" type="int" autoIncrement="true">
                 <constraints
@@ -31,4 +30,5 @@
             </column>
         </createTable>
     </changeSet>
+    <include file="changelog-01.xml" />
 </databaseChangeLog>

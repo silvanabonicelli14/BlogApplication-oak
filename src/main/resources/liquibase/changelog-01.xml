@@ -1,0 +1,22 @@
+<changeSet author="silvana.bonicelli" id="01_createTableArticleComments">
+    <comment>Create the table customerGroups</comment>
+    <createTable tableName="articlecomments" schemaName="Blog">
+        <column name="id" type="int" autoIncrement="true">
+            <constraints
+                    primaryKey="true"
+                    nullable="false"
+                    uniqueConstraintName="PK_articlecomments_table"
+            />
+        </column>
+        <column name="author" type="nvarchar(150)"/>
+        <column name="comment" type="nvarchar(2000)"/>
+        <column name="article_id" type="int"/>
+    </createTable>
+    <addForeignKeyConstraint  baseColumnNames="article_id"
+                              baseTableName="articlecomments"
+                              constraintName="fk_article_comments"
+                              onDelete="NO ACTION"
+                              onUpdate="CASCADE"
+                              referencedColumnNames="id"
+                              referencedTableName="articles" />
+</changeSet>
