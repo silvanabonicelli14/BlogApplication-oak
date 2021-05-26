@@ -8,7 +8,6 @@ import com.cmg.oak.blogApp.doors.outbound.entities.exposed.ArticleEntity
 import com.cmg.oak.blogApp.doors.outbound.entities.exposed.CommentArticleEntity
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Component
 
@@ -57,6 +56,6 @@ class ExposedArticlesDao: ArticlesDao{
         Unit
     }
 
-    private fun toArticle(it: ArticleDao) =
-        Article(it.id.value, it.title, it.body, mutableListOf<ArticleComment>())
+    private fun toArticle(art: ArticleDao) =
+        Article(art.id.value, art.title, art.body, art.comments.map { ArticleComment(it.id.value,it.author,it.comment,art.id.value) })
 }

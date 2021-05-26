@@ -1,6 +1,5 @@
 package com.cmg.oak.blogApp.doors.outbound.entities.exposed
 
-import com.cmg.oak.blogApp.domain.model.Article
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -19,5 +18,5 @@ class ArticleDao(id: EntityID<Int>) : IntEntity(id){
 
     var title by ArticleEntity.title
     var body by ArticleEntity.body
-
+    val comments by CommentArticlesDao referrersOn CommentArticleEntity.article_id
 }

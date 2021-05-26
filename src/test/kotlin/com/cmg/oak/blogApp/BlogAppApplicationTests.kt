@@ -2,10 +2,12 @@ package com.cmg.oak.blogApp
 
 import com.cmg.oak.blogApp.domain.model.Article
 import com.cmg.oak.blogApp.domain.model.ArticleComment
+import com.cmg.oak.blogApp.doors.outbound.daos.ArticleCommentDao
 import com.cmg.oak.blogApp.doors.outbound.daos.ArticlesDao
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.matchers.shouldBe
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,23 +26,29 @@ import org.springframework.test.web.servlet.post
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BlogAppApplicationTests(
 	@Autowired @Qualifier("exposed") private val articlesDao: ArticlesDao,
+	@Autowired @Qualifier("exposedComment") private val commentArticlesDao: ArticleCommentDao,
 	@Autowired private val mockMvc: MockMvc) {
 
 	private val mapper = jacksonObjectMapper()
-	val articles = listOf(
-		Article(1, "title x", "body of the article x",mutableListOf<ArticleComment>()),
-		Article(2, "title y", "body of the article y",mutableListOf<ArticleComment>()))
-
-	val articleComments = listOf(
-		ArticleComment(1, "Silvana", "comment of the article x",1),
-		ArticleComment(2, "Andrea", "comment of the article y",2)
+	val comments = listOf<ArticleComment>(
+		ArticleComment(1, "Silvana", "comment of the article x", 1),
+		ArticleComment(2, "Andrea", "comment of the article x", 1)
 	)
 
+	val articles = listOf(
+		Article(1, "title x", "body of the article x", comments),
+		Article(2, "title y", "body of the article y",mutableListOf<ArticleComment>()))
+
 	fun withExpected(test: (List<Article>) -> Unit){
-		articlesDao.reset()
-		articles
-			.map(articlesDao::save)
-			.let(test)
+		transaction{
+			commentArticlesDao.reset()
+			articlesDao.reset()
+			articles
+				.map(articlesDao::save)
+
+			comments.map(commentArticlesDao::save)
+		}
+		articles.let(test)
 	}
 
 	@Test

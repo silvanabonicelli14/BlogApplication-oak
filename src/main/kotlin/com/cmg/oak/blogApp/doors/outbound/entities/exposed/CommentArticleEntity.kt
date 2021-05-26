@@ -1,5 +1,6 @@
 package com.cmg.oak.blogApp.doors.outbound.entities.exposed
 
+import com.cmg.oak.blogApp.domain.model.Article
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -14,15 +15,15 @@ object CommentArticleEntity : IntIdTable("Blog.articlecomments") {
 
     val author: Column<String> = varchar("author", 2000)
     val comment: Column<String> = varchar("comment", 2000)
-    val article_id: Column<EntityID<Int>> = reference("article_id", ArticleEntity.id).uniqueIndex()
+    val article_id = reference("article_id",ArticleEntity.id)
 }
 
-class CommentArticleDao(id: EntityID<Int>) : IntEntity(id){
-    companion object : IntEntityClass<CommentArticleDao>(CommentArticleEntity)
+class CommentArticlesDao(id: EntityID<Int>) : IntEntity(id){
+    companion object : IntEntityClass<CommentArticlesDao>(CommentArticleEntity)
 
 
     var comment by CommentArticleEntity.comment
-    var article_id by CommentArticleEntity.article_id
+    var article by ArticleDao referencedOn CommentArticleEntity.article_id
     var author  by CommentArticleEntity.author
 
 }
